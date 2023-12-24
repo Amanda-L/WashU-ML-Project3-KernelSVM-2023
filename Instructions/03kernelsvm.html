@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+
+<!--
+<script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+<script type="text/javascript">
+LatexIT.add('p',true);
+</script>
+-->
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] }
+    });
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js">
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Project 3: Kernel SVM</title>
+<link href="projects.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h2>Project 3: Kernel SVM</h2>
+
+
+  
+<!--announcements-->
+<blockquote>
+    <center>
+    <a href="http://allyouneedismyth.com/wp-content/uploads/2013/10/yin-yang-copy.png"><img src="yinyang.png" width="300px" /></a>
+    </center>
+      <p><cite><center>"Just as we have two eyes and two feet,<br>
+      duality is part of life."<br>
+<b>--Carlos Santana</b><br>
+      </center></cite></p>
+</blockquote>
+
+<h3>Introduction</h3>
+<p>
+    In this project you will implement a kernel SVM. First create a GitHub Classroom team and clone the project3 repository. </p>
+
+<p>The code for this project (<code>project3</code>) consists of several files, some of which you will need to read and understand in order to complete the assignment, and some of which you can ignore. 
+<table border="0" cellpadding="10">
+  <tr><td colspan="2"><b>Files you'll edit:</b>
+</td></tr> 
+<!--<tr><td><code>  <font color="red">codename.txt</font></code></td><td>This file contains your codename that represents you on the leaderboard. You can change your codename anytime you want, but please avoid offensive or annoying names (e.g. no names of other class mates, no swear words, no inappropriate body parts, javascripts,...) </td></tr>-->
+<tr><td><code>l2distance.py</code></td><td>
+	Computes the Euclidean distances between two sets of vectors. This should be done as efficiently as possible!
+</td></tr>
+<tr><td><code>computeK.py</code></td><td>
+	Computes a kernel matrix given input vectors. 
+</td></tr>
+<tr><td><code>generateQP.py</code></td><td>
+	Generates all the right vectors for the qp solver.
+</td></tr>
+<tr><td><code>recoverBias.py</code></td><td>
+	Solves for the hyperplane bias <i>b</i> after the SVM dual has been solved. 
+</td></tr>
+<tr><td><code>crossvalidate.py</code></td><td>
+	A function that uses cross validation to find the best kernel parameter and regularization constant. 
+</td></tr>
+<tr><td><code>createsvmclassifier.py</code></td><td>
+	This function returns a function svmclassify that can be used to classify test data.
+</td></tr>
+<tr><td><code>main.py</code></td><td>
+	A script with prewritten code for testing your implementation and where you'll save your best parameters. 
+</td></tr>
+ <tr><td colspan="2"><b>Files you might want to look at:</b></td></tr>
+<tr><td><code>visdecision.py</code></td><td>
+	This function visualizes the decision boundary of an SVM in 2d. 	
+</td></tr>
+<tr><td><code>trainsvm.py</code></td><td>
+	Trains a kernel SVM on a data set and outputs a classifier. 
+</td></tr>
+</table>
+
+<p><strong>Allowed Libraries:</strong> Do not import any additional libraries in any file. This will cause the autograder to fail since using only numpy will be sufficient for a successful implementation.
+
+<p><strong>How to submit:</strong>  You can commit your code through the command line with git and submit on Gradescope either in a zip file or through Github. If the project is submitted before the initial deadline passes, you will receive information and a score for the performance evaluation (only once the deadline is reached).
+However, the autograder will not reveal any information on how your code performed for any projects submitted during the three day extension period. You can submit your project as many times as you want but the final submission score will count for your grade. If you submitted by the initial deadline and would like to improve your performance score, you can submit again during the extension period.<br>
+
+
+<p><strong>Grading:</strong> Your code will be autograded for technical
+correctness. Please <em>do not</em> change the names of any provided functions or classes within the code, or you will wreak havoc on the autograder. However, the correctness of your implementation -- not the autograder's output -- will be the final judge of your score.  If necessary, we will review and grade assignments individually to ensure that you receive due credit for your work.</p>
+
+<p><strong>PYTHON Version in Autograder:</strong> The autograder uses PYTHON 3.6. To rule out any incompatabilites of differnt versions we recommend to use any version of PYTHON 3.6 or newer for the implementation projects.
+
+<p><strong>Regrade Requets:</strong> Use Gradescope for regrade requests. 
+</p>
+
+<p><strong>Academic Dishonesty:</strong> We will be checking your code against other submissions in the class for logical redundancy. If you copy someone else's code and submit it with minor changes, we will know. These cheat detectors are quite hard to fool, so please don't try. We trust you all to submit your own work only; <em>please</em> don't let us down. If you do, we will pursue the strongest consequences available to us.
+
+<p><strong>Getting Help:</strong> You are not alone!  If you find yourself stuck  on something, contact the course TAs for help.  Office hours and <a href="https://piazza.com/">Piazza</a> are there for your 
+support; please use them.  If you can't make our office hours, let us know and we will schedule more.  We want these projects to be rewarding and instructional, not frustrating and demoralizing.  But, we don't know when or how to help unless you ask. 
+
+<h3>Project Goal</h3>
+In this project, you will implement a kernel SVM solver. 
+Remember that the SVM optimization has the following dual formulation:
+$$
+\begin{aligned}
+             &\min_{\alpha_1,\cdots,\alpha_n}\frac{1}{2} \sum_{i,j}\alpha_i \alpha_j y_i y_j \mathbf{K}_{ij} - \sum_{i=1}^{n}\alpha_i  \\
+       \text{s.t.}  &\quad 0 \leq \alpha_i \leq C\\
+             &\quad \sum_{i=1}^{n} \alpha_i y_i = 0.
+\end{aligned}
+$$
+This is equivalent to solving for the SVM primal
+$$ L(\mathbf{w},b) = C\sum_{i=1}^n \max(1-y_i(\mathbf{w}^\top\phi(\mathbf{x}_i)+b),0) + ||w||_2^2$$
+where $\mathbf{w}=\sum_{i=1}^n y_i \alpha_i \phi(\mathbf{x}_i)$ and $\mathbf{K}_{ij}=k(\mathbf{x}_i,\mathbf{x}_j)=\phi(\mathbf{x}_i)^\top\phi(\mathbf{x}_j)$, for some mapping $\phi(\cdot)$.  Please note that here all $\alpha_i\geq 0$. This is possible because we multiply by $y_i$ in the definition of $\mathbf{w}$. One advantage of keeping all $\alpha_i$ non-negative is that we can easily identify non-support vectors as vectors with $\alpha_i=0$. 
+
+<h4>Spiral data set</h4>
+
+<p>We provide you with a "spiral" data set which is loaded in main.py as xTr and yTr. Here it is visualized:</p>
+    <center>
+    <img src="spiral0.png" width="500px" />
+   </center>
+
+
+<h3>Implementing a kernelized SVM</h3>
+
+<ol>   
+<li><p> First implement the kernel function
+<pre>	K = computeK(ktype,X,Z,kpar)</pre>
+It takes as input a kernel type (ktype) and two data sets $\mathbf{X}$ in $\mathcal{R}^{d\times n}$ and $\mathbf{Z}$ in $\mathcal{R}^{d\times m}$ and outputs a kernel matrix $\mathbf{K}\in{\mathcal{R}^{n\times m}}$. The last input, <code>kpar</code> specifies the kernel parameter (e.g. the inverse kernel width $\gamma$ in the RBF case or the degree $p$ in the polynomial case.)
+	<ol>
+	<li>For the linear kernel (<code>ktype='linear'</code>) svm, we use $k(\mathbf{x},\mathbf{z})=x^Tz$ </li> 
+	<li>For the radial basis function kernel (<code>ktype='rbf'</code>) svm we use $k(\mathbf{x},\mathbf{z})=\exp(-\gamma ||x-z||^2)$ (gamma is a hyperparameter, passed a the value of kpar)</li>
+	<li>For the polynomial kernel (<code>ktype='poly'</code>) we use  $k(\mathbf{x},\mathbf{z})=(x^Tz + 1)^p$ (p is the degree of the polymial, passed as the value of kpar)</li>
+</ol>
+You should implement the function 		
+<pre>
+        D = l2distance(X,Z)
+</pre> to use as a helper function of the rbf kernel. This function calculates D(i,j) as the Euclidean distance of X(:,i) and Z(:,j). Eventually you want to make this efficient since the speed of this calculation will be used by the autograder to calculate your grade.
+
+</p>
+</li>
+		
+
+<li><p>
+We will use the python optimization solver qpsolvers to solve the SVM optimization problem. The function solve_qp() needs the problem to be formulated as a quadratic program as shown below. 
+    <center>
+    <img src="quadratic_form.png" width="200px" />
+   </center>
+In our case, $x$ is the column vector $\alpha$. For more information see the <a href="https://scaron.info/doc/qpsolvers/">documentation</a>. You should now implement 		<pre>
+        Q, p, G, h, A, b = generateQP(K, yTr, C)
+		</pre>
+ so that each variable is assigned an np array with the correct dimensions and content. Do not change the return statement since that puts it in the data structure necessary for the solver. 
+ 
+<b> Warning: In our code, variable Q represents the quadratic objective term P, and variable p represents the linear objective term q.</b>
+    
+</li>
+
+<li><p>
+		Now that you can solve the dual correctly, you should have the values for $\alpha_i$. But you are not done yet. You still need to be able to classify new test points. Remember from class that $h(\mathbf{x})=\sum_{i=1}^n \alpha_i y_i k(\mathbf{x}_i,\mathbf{x})+b$. We need to obtain $b$. It is easy to show (and omitted here) that if $C>\alpha_i>0$ (with strict $>$), then we must have that $y_i(\mathbf{w}^\top \phi(\mathbf{x}_i)+b)=1$. Rephrase this equality in terms of $\alpha_i$ and solve for $b$. Implement
+		<pre>
+		bias=recoverBias(K,yTr,alphas,C);
+		</pre>
+		where <code>bias</code> is the hyperplane bias $b$ 
+		(Hint: This is most stable if you pick an $\alpha_i$ that is furthest from $C$ and $0$. )
+</p></li>
+
+
+<li><p> With the <code>recoverBias</code> function in place, you can now implement <pre> svmclassify = createsvmclassifier(xTr, yTr, alphas, bias, ktype, kpar) </pre> which gives you an actual classifier <code>svmclassify</code> that can be used to classify test data. This function takes all the information needed to create a classifier and defines a function <code> svmclassify(xTe) </code> that takes the dxn test data and returns predictions 1 or -1. <br><br>
+You can now run main.py, which creates a classifier and prints your training error. Some of the code in main.py relies on functions you haven't implemented yet, so you might want to comment those out. With default parameters C=1, 'rbf', and P=1, you should get training error of .04 if you implemented everything correctly. The plotted decision boundary on the training data from <code>visdecision.py</code> will look like this:
+    <center>
+    <img src="spiral.png" width="300px" />
+   </center>
+
+
+You might want to test your linear and polynomial kernels too, but don't expect them to be able to make any progress on this dataset. 
+
+<li><p> If you play around with your new SVM solver, you will notice that it is rather sensitive to the kernel and regularization parameters. You therefore need to implement a function 
+<pre>
+bestC, bestP, lowest_error, errors = crossvalidate(xTr, yTr, ktype, Cs, paras)
+</pre>
+to automatically sweep over different values of C and kpars and output the best setting on a validation set. There are many ways to implement this, and you can do it any way you want since this function will not be evaluated by the autograder. There is a default list of parameters to try included in main.py, but you probably want to expand this list and focus on the best performing parameters. 
+
+Some code is commented out in main.py to help you visualize your cross validation. This will be most useful if you try many parameters. <br><br>
+
+<b> IMPORTANT: </b> You must commit and add best_parameters.pickle to your submission so that the autograder can use it in evaluation.<br><br>	
+
+main.py will automatically save the best parameters from cross validation to a file that will be read by the autograder. You can set and save these parameters however you like though. 
+
+
+
+<h3>Hints</h3>
+<p>65% of the grade for your project3 submission will be assigned based on the correctness of your kernel SVM implementation. </p>
+<p>5% of the grade for your project3 submission will be assigned based on the correctness of your <code>l2distance.py</code> function.  </p>
+
+<h3> SVM Training (Quality Evaluation)</h3>
+<p>25% of the grade for your project3 submission will be assigned by how well your kernel SVM performs on a spiral test set using an rbf kernel and the parameters C and P you submit in best_parameters.pickle.
+
+<h3> Efficient L2 Distance (Efficiency Evaluation)</h3>
+<p>5% of the grade for your project3 submission will be assigned based on the speed of your <code>l2distance.py</code> function on large matrices.  </p>
+
+<hr>
+<h5>Credits: Project adapted from Kilian Weinberger (Thanks for sharing!). Project adapted to Python by Zach Mekus (2019). </h5>
+
+
+</body>
+</html>
