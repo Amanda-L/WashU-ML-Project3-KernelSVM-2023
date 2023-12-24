@@ -4,7 +4,6 @@ In this assignment, the task is to implement a kernel SVM solver using the dual 
 
 1. **Spiral Data Set:**
    - Provided with a "spiral" data set loaded as `xTr` and `yTr` in `main.py`.
-   - Visualize the data set.
 
 2. **Kernel Function Implementation (computeK):**
    - Implement the kernel function `computeK(ktype, X, Z, kpar)`:
