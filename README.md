@@ -1,4 +1,6 @@
 # Project 3: Kernel SVM
+![image](https://github.com/Amanda-L/WashU-ML-Project3-KernelSVM-2023/assets/52643725/81d7fba4-ec15-4848-a47f-def7ff22b695)
+
 
 In this assignment, the task is to implement a kernel SVM solver using the dual formulation of the SVM optimization problem. Here is a summarized breakdown of the steps involved and files edited:
 
