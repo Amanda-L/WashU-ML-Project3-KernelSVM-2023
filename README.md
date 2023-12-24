@@ -7,9 +7,9 @@ In this assignment, the task is to implement a kernel SVM solver using the dual 
 
 2. **Kernel Function Implementation (computeK):**
    - Implement the kernel function `computeK(ktype, X, Z, kpar)`:
-     - Linear kernel (`ktype='linear'`): \( K = X^T Z \)
-     - Radial basis function (RBF) kernel (`ktype='rbf'`): \( K = \exp(-\gamma \|X - Z\|^2) \)
-     - Polynomial kernel (`ktype='poly'`): \( K = (X^T Z + 1)^p \)
+     - Linear kernel (`ktype='linear'`)
+     - Radial basis function (RBF) kernel (`ktype='rbf'`)
+     - Polynomial kernel (`ktype='poly'`)
    - Implement the helper function `l2distance(X, Z)` for efficient Euclidean distance calculations.
 
 3. **Quadratic Program Formulation (generateQP):**
@@ -30,7 +30,6 @@ In this assignment, the task is to implement a kernel SVM solver using the dual 
    - Expected training error with default parameters is 0.04.
 
 7. **Kernel Sensitivity and Cross-Validation:**
-   - The SVM solver is sensitive to kernel and regularization parameters.
    - Implement a function `crossvalidate(xTr, yTr)` to sweep over different values of C and kernel parameters and output the best setting on a validation set.
    - Visualize cross-validation results in `main.py`.
    - Experiment with different parameters for better performance.
