@@ -34,6 +34,10 @@ In this assignment, the task is to implement a kernel SVM solver using the dual 
    - Visualize cross-validation results in `main.py`.
    - Experiment with different parameters for better performance.
 
-The focus is on achieving the lowest training error and optimizing the SVM solver for the given data set.
+The focus is on achieving the lowest training error and optimizing the SVM solver for the given data set. The plotted decision boundary on the training data from
+visdecision.py will look like this:
+![image](https://github.com/Amanda-L/WashU-ML-Project3-KernelSVM-2023/assets/52643725/cf4c4343-55ea-4b46-8b10-10fa7aeac564)
+
+
 
 View 03kernelsvm.html under the Instructions folder for detailed instructions on the assignment.
