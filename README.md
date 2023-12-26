@@ -14,7 +14,7 @@ In this assignment, the task is to implement a kernel SVM solver to classify a s
      - Linear kernel (`ktype='linear'`)
      - Radial basis function (RBF) kernel (`ktype='rbf'`)
      - Polynomial kernel (`ktype='poly'`)
-   - Implement the helper function `l2distance(X, Z)` for efficient Euclidean distance calculations.
+   - Implement the helper function `l2distance(X, Z)` for Euclidean distance calculations.
 
 3. **Quadratic Program Formulation (generateQP):**
    - Implement the function `generateQP(K, yTr, C)` to formulate the quadratic program for the SVM solver.
@@ -29,7 +29,6 @@ In this assignment, the task is to implement a kernel SVM solver to classify a s
 
 6. **Training and Evaluation (main.py):**
    - Run `main.py` to create a classifier and print the training error.
-   - Comment out code related to functions not yet implemented.
    - The default parameters are C=1, kernel type 'rbf', and polynomial degree P=1.
    - Expected training error with default parameters is 0.04.
 
