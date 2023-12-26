@@ -2,10 +2,12 @@
 ![image](https://github.com/Amanda-L/WashU-ML-Project3-KernelSVM-2023/assets/52643725/81d7fba4-ec15-4848-a47f-def7ff22b695)
 
 
-In this assignment, the task is to implement a kernel SVM solver using the dual formulation of the SVM optimization problem. Here is a summarized breakdown of the steps involved and files edited:
+In this assignment, the task is to implement a kernel SVM solver to classify a spiral data set using the dual formulation of the SVM optimization problem. Here is a summarized breakdown of the steps involved and files edited:
 
 1. **Spiral Data Set:**
    - Provided with a "spiral" data set loaded as `xTr` and `yTr` in `main.py`.
+   - ![image](https://github.com/Amanda-L/WashU-ML-Project3-KernelSVM-2023/assets/52643725/7f0a5f70-242f-4865-8ee6-9b24421c1b95)
+
 
 2. **Kernel Function Implementation (computeK):**
    - Implement the kernel function `computeK(ktype, X, Z, kpar)`:
